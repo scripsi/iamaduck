@@ -1,0 +1,23 @@
+# This is the I am a Duck configuration file
+#
+# Lines beginning with "#"" are comments and have
+# no effect. Before each setting, there is usually
+# a comment to tell you what it does and how to
+# change it. Where I say "uncomment the next line"
+# that means to delete the # symbol from the next 
+# line so that it comes into effect!
+
+# Wireless network settings
+WiFi:
+  - network: my_network
+    ssid   : my_wifi_name
+    key    : my_wifi_password
+  - network: my_other_network
+    ssid   : my_other_wifi
+    key    : my_other_password
+    
+# email server settings
+email:
+  - account: iamaduck
+    username: iamaduck@example.com
+    password: somesecretpassword
