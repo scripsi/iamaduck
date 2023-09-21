@@ -1,0 +1,13 @@
+#/etc/systemd/system/iamaduck.service
+[Unit]
+Description=IAmADuck
+After=network.target
+
+[Service]
+ExecStart=/bin/bash src/iamaduck.sh
+WorkingDirectory=/mnt/iamaduck
+Restart=on-failure
+User=anas
+
+[Install]
+WantedBy=multi-user.target

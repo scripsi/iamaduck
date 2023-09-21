@@ -2,7 +2,13 @@
 # 
 #  /etc/systemd/system/iamaduck.service
 
+
 LOGFILE="iamaduck.log"
+
+if [ -e "$LOGFILE" ]
+then
+  mv -f "$LOGFILE" "$LOGFILE".old
+fi
 
 echo "$0 started!" > "$LOGFILE"
 date >> "$LOGFILE"
@@ -13,8 +19,10 @@ then
   echo "Updated WiFi config found" >> "$LOGFILE"
   echo "Rewriting wpa_supplicant..." >> "$LOGFILE"
   sudo python src/update_wifi.py
+  # make wifi.ini times match wpa_supplicant.conf to avoid reboot loop
+  touch --reference=/etc/wpa_supplicant/wpa_supplicant.conf wifi.ini
   echo "wpa_supplicant.conf rewritten. Rebooting... " >> "$LOGFILE"
-  # sudo reboot
+  sudo reboot
 else
   echo "No updates to WiFi config found" >> "$LOGFILE"
 fi
@@ -34,7 +42,7 @@ do
     NETWORK_RETRY=0
     NETWORK="ONLINE"
   else
-    echo "Internet offline" >> "$LOGFILE"
+    echo "Internet offline. Retrying in 10s..." >> "$LOGFILE"
     if [ $NETWORK_RETRY_COUNT -gt 10 ]
     then
       echo "Too many retries" >> "$LOGFILE"
@@ -44,4 +52,25 @@ do
     fi
   fi
 done
+
+echo "Network is" $NETWORK >> "$LOGFILE"
+
+# Check for updates
+if [ $NETWORK = "ONLINE" ]
+then
+  echo "Checking for updates..." >> "$LOGFILE"
+  git fetch
+  updates=$(git rev-list HEAD...origin/main --count)
+  if [ $updates -gt 0 ]
+  then
+    echo "Software is" $updates "updates behind current version. Updating..." >> "$LOGFILE"
+    git pull
+  else
+    echo "Software is up to date" >> "$LOGFILE"
+  fi
+  # Download mail
+  echo "Downloading mail..." >> "$LOGFILE"
+  offlineimap -c mail.ini
+  
+fi
 

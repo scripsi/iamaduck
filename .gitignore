@@ -1,5 +1,6 @@
 iamaduck.log
+iamaduck.log.old
 config.txt
-config.ini
-wifi.ini
+*.ini
 "System Volume Information"
+mail/
