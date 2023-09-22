@@ -4,9 +4,9 @@ from PIL import Image,ImageDraw,ImageFont
 import random
 import math
 import mailbox
-import imaplib
-import email
-from email import policy
+# import imaplib
+# import email
+# from email import policy
 
 LEADING = 2
 MARGIN = 20
@@ -14,22 +14,22 @@ MARGIN = 20
 img = Image.new(mode='P',size=(config.WIDTH,config.HEIGHT), color=config.WHITE)
 img_draw = ImageDraw.Draw(img)
 
-fonts = ["../assets/fonts/Action_Man/Action_Man_Bold.ttf",
-         "../assets/fonts/ArchitectsDaughter/ArchitectsDaughter-Regular.ttf",
-         "../assets/fonts/Bangers/Bangers-Regular.ttf",
-         "../assets/fonts/FredokaOne/FredokaOne-Regular.ttf",
-         "../assets/fonts/HachiMaruPop/HachiMaruPop-Regular.ttf",
-         "../assets/fonts/Lobster/Lobster-Regular.ttf",
-         "../assets/fonts/LondrinaSolid/LondrinaSolid-Regular.ttf",
-         "../assets/fonts/Merienda/Merienda-Regular.ttf",
-         "../assets/fonts/Merriweather/Merriweather-Regular.ttf",
-         "../assets/fonts/Pacifico/Pacifico-Regular.ttf",
-         "../assets/fonts/Ranchers/Ranchers-Regular.ttf",
-         "../assets/fonts/RobotoSlab/RobotoSlab-Bold.ttf",
-         "../assets/fonts/RockSalt/RockSalt-Regular.ttf",
-         "../assets/fonts/SpecialElite/SpecialElite-Regular.ttf",
-         "../assets/fonts/StalinistOne/StalinistOne-Regular.ttf",
-         "../assets/fonts/Ultra/Ultra-Regular.ttf"]
+fonts = ["/mnt/iamaduck/assets/fonts/Action_Man/Action_Man_Bold.ttf",
+         "/mnt/iamaduck/assets/fonts/ArchitectsDaughter/ArchitectsDaughter-Regular.ttf",
+         "/mnt/iamaduck/assets/fonts/Bangers/Bangers-Regular.ttf",
+         "/mnt/iamaduck/assets/fonts/FredokaOne/FredokaOne-Regular.ttf",
+         "/mnt/iamaduck/assets/fonts/HachiMaruPop/HachiMaruPop-Regular.ttf",
+         "/mnt/iamaduck/assets/fonts/Lobster/Lobster-Regular.ttf",
+         "/mnt/iamaduck/assets/fonts/LondrinaSolid/LondrinaSolid-Regular.ttf",
+         "/mnt/iamaduck/assets/fonts/Merienda/Merienda-Regular.ttf",
+         "/mnt/iamaduck/assets/fonts/Merriweather/Merriweather-Regular.ttf",
+         "/mnt/iamaduck/assets/fonts/Pacifico/Pacifico-Regular.ttf",
+         "/mnt/iamaduck/assets/fonts/Ranchers/Ranchers-Regular.ttf",
+         "/mnt/iamaduck/assets/fonts/RobotoSlab/RobotoSlab-Bold.ttf",
+         "/mnt/iamaduck/assets/fonts/RockSalt/RockSalt-Regular.ttf",
+         "/mnt/iamaduck/assets/fonts/SpecialElite/SpecialElite-Regular.ttf",
+         "/mnt/iamaduck/assets/fonts/StalinistOne/StalinistOne-Regular.ttf",
+         "/mnt/iamaduck/assets/fonts/Ultra/Ultra-Regular.ttf"]
 
 # colour schemes (background,foreground)
 colours = [(config.BLACK,config.WHITE),(config.BLACK,config.YELLOW),(config.BLACK,config.ORANGE),
@@ -49,11 +49,13 @@ def setup():
     
     config.dbg("screen_default: setup")
     for msg in mailbox.Maildir('/mnt/iamaduck/mail/INBOX'):
+      subject = msg['subject']
+      config.dbg("Found quack:" + subject)
       # The following line removes newlines (\r\n) sometimes present in long subjects
       q = ''.join(msg['Subject'].splitlines())
       quacks.append(q)
     
-    print(quacks)
+    # print(quacks)
 
 def get_image():
     """Returns an image to be displayed on the screen

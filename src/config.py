@@ -21,7 +21,7 @@ HEIGHT = 448
 def setup():
     """Read and set up config
     """
-    ini_file = "/mnt/iamaduck/config.ini"
+    ini_file = "/mnt/iamaduck/iamaduck.ini"
     ini.read(ini_file)
 
 def dbg(dbg_message):

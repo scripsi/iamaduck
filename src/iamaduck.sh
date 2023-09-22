@@ -3,7 +3,7 @@
 #  /etc/systemd/system/iamaduck.service
 
 
-LOGFILE="iamaduck.log"
+LOGFILE="startup.log"
 
 if [ -e "$LOGFILE" ]
 then
@@ -73,4 +73,5 @@ then
   offlineimap -c mail.ini
   
 fi
-
+echo "Starting iamaduck.py..." >> "$LOGFILE"
+python src/iamaduck.py

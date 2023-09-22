@@ -1,6 +1,6 @@
-iamaduck.log
-iamaduck.log.old
-config.txt
+*.log
+*.log.old
 *.ini
-"System Volume Information"
+"System Volume Information"/
 mail/
+__pycache__

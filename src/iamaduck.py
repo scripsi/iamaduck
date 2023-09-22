@@ -8,7 +8,7 @@ import time
 from inky.inky_uc8159 import Inky
 from gpiozero import Button
 from signal import pause
-import screen_default
+import screen_quacks
 import os
 from configparser import ConfigParser
 
@@ -28,25 +28,25 @@ button_d = Button(24)
 
 def show_image(image_to_show):
 
-    if image_to_show == "default":
-        screen_default.update_image()
-        inky.set_image(screen_default.get_image())
+    if image_to_show == "quacks":
+        screen_quacks.update_image()
+        inky.set_image(screen_quacks.get_image())
         inky.show()
 
-def show_default():
-    show_image("default")
+def show_quacks():
+    show_image("quacks")
 
 
-button_a.when_released = show_default
-button_b.when_released = show_default
-button_c.when_released = show_default
-button_d.when_released = show_default
+button_a.when_released = show_quacks
+button_b.when_released = show_quacks
+button_c.when_released = show_quacks
+button_d.when_released = show_quacks
 
 config.setup()
 config.dbg("Debugging enabled!")
-screen_default.setup()
-show_default()
-schedule.every(int(config.ini['screen_default']['refresh_interval'])).minutes.do(show_default)
+screen_quacks.setup()
+show_quacks()
+schedule.every(int(config.ini['screen_quacks']['refresh_interval'])).minutes.do(show_quacks)
 
 while True:
     schedule.run_pending()
