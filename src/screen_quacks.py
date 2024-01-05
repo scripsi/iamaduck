@@ -14,22 +14,22 @@ MARGIN = 20
 img = Image.new(mode='P',size=(config.WIDTH,config.HEIGHT), color=config.WHITE)
 img_draw = ImageDraw.Draw(img)
 
-fonts = ["/mnt/iamaduck/assets/fonts/Action_Man/Action_Man_Bold.ttf",
-         "/mnt/iamaduck/assets/fonts/ArchitectsDaughter/ArchitectsDaughter-Regular.ttf",
-         "/mnt/iamaduck/assets/fonts/Bangers/Bangers-Regular.ttf",
-         "/mnt/iamaduck/assets/fonts/FredokaOne/FredokaOne-Regular.ttf",
-         "/mnt/iamaduck/assets/fonts/HachiMaruPop/HachiMaruPop-Regular.ttf",
-         "/mnt/iamaduck/assets/fonts/Lobster/Lobster-Regular.ttf",
-         "/mnt/iamaduck/assets/fonts/LondrinaSolid/LondrinaSolid-Regular.ttf",
-         "/mnt/iamaduck/assets/fonts/Merienda/Merienda-Regular.ttf",
-         "/mnt/iamaduck/assets/fonts/Merriweather/Merriweather-Regular.ttf",
-         "/mnt/iamaduck/assets/fonts/Pacifico/Pacifico-Regular.ttf",
-         "/mnt/iamaduck/assets/fonts/Ranchers/Ranchers-Regular.ttf",
-         "/mnt/iamaduck/assets/fonts/RobotoSlab/RobotoSlab-Bold.ttf",
-         "/mnt/iamaduck/assets/fonts/RockSalt/RockSalt-Regular.ttf",
-         "/mnt/iamaduck/assets/fonts/SpecialElite/SpecialElite-Regular.ttf",
-         "/mnt/iamaduck/assets/fonts/StalinistOne/StalinistOne-Regular.ttf",
-         "/mnt/iamaduck/assets/fonts/Ultra/Ultra-Regular.ttf"]
+fonts = ["/home/anas/iamaduck/assets/fonts/Action_Man/Action_Man_Bold.ttf",
+         "/home/anas/iamaduck/assets/fonts/ArchitectsDaughter/ArchitectsDaughter-Regular.ttf",
+         "/home/anas/iamaduck/assets/fonts/Bangers/Bangers-Regular.ttf",
+         "/home/anas/iamaduck/assets/fonts/FredokaOne/FredokaOne-Regular.ttf",
+         "/home/anas/iamaduck/assets/fonts/HachiMaruPop/HachiMaruPop-Regular.ttf",
+         "/home/anas/iamaduck/assets/fonts/Lobster/Lobster-Regular.ttf",
+         "/home/anas/iamaduck/assets/fonts/LondrinaSolid/LondrinaSolid-Regular.ttf",
+         "/home/anas/iamaduck/assets/fonts/Merienda/Merienda-Regular.ttf",
+         "/home/anas/iamaduck/assets/fonts/Merriweather/Merriweather-Regular.ttf",
+         "/home/anas/iamaduck/assets/fonts/Pacifico/Pacifico-Regular.ttf",
+         "/home/anas/iamaduck/assets/fonts/Ranchers/Ranchers-Regular.ttf",
+         "/home/anas/iamaduck/assets/fonts/RobotoSlab/RobotoSlab-Bold.ttf",
+         "/home/anas/iamaduck/assets/fonts/RockSalt/RockSalt-Regular.ttf",
+         "/home/anas/iamaduck/assets/fonts/SpecialElite/SpecialElite-Regular.ttf",
+         "/home/anas/iamaduck/assets/fonts/StalinistOne/StalinistOne-Regular.ttf",
+         "/home/anas/iamaduck/assets/fonts/Ultra/Ultra-Regular.ttf"]
 
 # colour schemes (background,foreground)
 colours = [(config.BLACK,config.WHITE),(config.BLACK,config.YELLOW),(config.BLACK,config.ORANGE),
@@ -48,7 +48,7 @@ def setup():
     
     
     config.dbg("screen_default: setup")
-    for msg in mailbox.Maildir('/mnt/iamaduck/mail/INBOX'):
+    for msg in mailbox.Maildir('/home/anas/iamaduck/mail/INBOX'):
       subject = msg['subject']
       config.dbg("Found quack:" + subject)
       # The following line removes newlines (\r\n) sometimes present in long subjects

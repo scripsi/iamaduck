@@ -4,3 +4,4 @@
 "System Volume Information"/
 mail/
 __pycache__
+.venv/

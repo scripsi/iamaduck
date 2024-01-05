@@ -2,8 +2,9 @@
 # 
 #  /etc/systemd/system/iamaduck.service
 
-
-LOGFILE="startup.log"
+VPYTHON="/home/anas/iamaduck/.venv/bin/python"
+CONFDIR="/mnt/iamaduck"
+LOGFILE="$CONFDIR"/startup.log
 
 if [ -e "$LOGFILE" ]
 then
@@ -14,13 +15,13 @@ echo "$0 started!" > "$LOGFILE"
 date >> "$LOGFILE"
 
 # check if network config has been updated
-if [ wifi.ini -nt /etc/wpa_supplicant/wpa_supplicant.conf ]
+if [ "$CONFDIR"/wifi.ini -nt /etc/wpa_supplicant/wpa_supplicant.conf ]
 then
   echo "Updated WiFi config found" >> "$LOGFILE"
   echo "Rewriting wpa_supplicant..." >> "$LOGFILE"
-  sudo python src/update_wifi.py
+  sudo "$VPYTHON" src/update_wifi.py
   # make wifi.ini times match wpa_supplicant.conf to avoid reboot loop
-  touch --reference=/etc/wpa_supplicant/wpa_supplicant.conf wifi.ini
+  touch --reference=/etc/wpa_supplicant/wpa_supplicant.conf "$CONFDIR"/wifi.ini
   echo "wpa_supplicant.conf rewritten. Rebooting... " >> "$LOGFILE"
   sudo reboot
 else
@@ -47,7 +48,7 @@ do
     then
       echo "Too many retries" >> "$LOGFILE"
     else
-      echo "Retrying in 10 seconds..."
+      echo "Retrying in 10 seconds..." >> "$LOGFILE"
       sleep 10
     fi
   fi
@@ -70,8 +71,8 @@ then
   fi
   # Download mail
   echo "Downloading mail..." >> "$LOGFILE"
-  offlineimap -c mail.ini
+  offlineimap -c "$CONFDIR"/mail.ini
   
 fi
 echo "Starting iamaduck.py..." >> "$LOGFILE"
-python src/iamaduck.py
+"$VPYTHON" src/iamaduck.py
