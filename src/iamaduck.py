@@ -8,6 +8,7 @@ import time
 from inky.inky_uc8159 import Inky
 from gpiozero import Button, LED
 from signal import pause
+import screen_startup
 import screen_quacks
 import os
 from configparser import ConfigParser
@@ -56,6 +57,10 @@ button_d.when_released = show_quacks
 indiCat.blink()
 config.setup()
 config.dbg("Debugging enabled!")
+screen_startup.update_image()
+inky.set_image(screen_startup.get_image())
+inky.show()
+time.sleep(5)
 screen_quacks.setup()
 show_quacks()
 indiCat.off()
