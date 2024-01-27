@@ -4,8 +4,7 @@ from PIL import Image,ImageDraw,ImageFont
 import random
 import math
 import mailbox
-# import imaplib
-# import email
+import email
 # from email import policy
 
 LEADING = 2
@@ -49,7 +48,15 @@ def setup():
     
     config.dbg("screen_default: setup")
     for msg in mailbox.Maildir('/home/anas/iamaduck/mail/INBOX'):
-      subject = msg['subject']
+      # Subject lines can contain encoded strings like =?UTF-8... which
+      # are sometimes not converted to plain text properly. Bizarrely,
+      # the solution is to use email.header's convenience methods to
+      # decode then re-encode the subject text, then finally cast to
+      # a string!
+      raw_subject = msg['subject']
+      decoded_subject = email.header.decode_header(raw_subject)
+      re_encoded_subject = email.header.make_header(decoded_subject)
+      subject = str(re_encoded_subject)
       config.dbg("Found quack:" + subject)
       # The following line removes newlines (\r\n) sometimes present in long subjects
       q = ''.join(msg['Subject'].splitlines())
