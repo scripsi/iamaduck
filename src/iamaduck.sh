@@ -2,77 +2,84 @@
 # 
 #  /etc/systemd/system/iamaduck.service
 
-VPYTHON="/home/anas/iamaduck/.venv/bin/python"
+# *** DEFAULT VARIABLES ***
+VPYTHON=".venv/bin/python"
 CONFDIR="/mnt/iamaduck"
-LOGFILE="$CONFDIR"/startup.log
+DBGFILE="$CONFDIR"/startup.log
+DBGTTY="/dev/ttyAMA0"
+SCRIPT=$(basename "$0")
 
-if [ -e "$LOGFILE" ]
+function dbg {
+  echo "$SCRIPT: $1" | tee -a "$DBGFILE" > "$DBGTTY"
+}
+
+if [ -e "$DBGFILE" ]
 then
-  mv -f "$LOGFILE" "$LOGFILE".old
+  mv -f "$DBGFILE" "$DBGFILE".old
+  touch "$DBGFILE"
 fi
 
-echo "$0 started!" > "$LOGFILE"
-date >> "$LOGFILE"
+right_now=$(date)
+dbg "Starting! $right_now"
 
 # check if network config has been updated
 if [ "$CONFDIR"/wifi.ini -nt /etc/wpa_supplicant/wpa_supplicant.conf ]
 then
-  echo "Updated WiFi config found" >> "$LOGFILE"
-  echo "Rewriting wpa_supplicant..." >> "$LOGFILE"
+  dbg "Updated WiFi config found"
+  dbg "Rewriting wpa_supplicant..."
   sudo "$VPYTHON" src/update_wifi.py
   # make wifi.ini times match wpa_supplicant.conf to avoid reboot loop
   touch --reference=/etc/wpa_supplicant/wpa_supplicant.conf "$CONFDIR"/wifi.ini
-  echo "wpa_supplicant.conf rewritten. Rebooting... " >> "$LOGFILE"
+  dbg "wpa_supplicant.conf rewritten. Rebooting... "
   sudo reboot
 else
-  echo "No updates to WiFi config found" >> "$LOGFILE"
+  dbg "No updates to WiFi config found"
 fi
 
 # Test network
 NETWORK_RETRY=1
 NETWORK_RETRY_COUNT=0
 NETWORK="OFFLINE"
-echo "Waiting for network..." >> "$LOGFILE"
+dbg "Waiting for network..."
 while [ $NETWORK_RETRY -gt 0 ]
 do
   wget -q --spider https://github.com
 
   if [ $? -eq 0 ]
   then
-    echo "Internet online" >> "$LOGFILE"
+    dbg "Internet is up"
     NETWORK_RETRY=0
     NETWORK="ONLINE"
   else
-    echo "Internet offline. Retrying in 10s..." >> "$LOGFILE"
     if [ $NETWORK_RETRY_COUNT -gt 10 ]
     then
-      echo "Too many retries" >> "$LOGFILE"
+      dbg "Internet offline. Too many retries"
     else
-      echo "Retrying in 10 seconds..." >> "$LOGFILE"
+      dbg "Internet offline. Retrying in 10 seconds..."
       sleep 10
     fi
   fi
 done
 
-echo "Network is" $NETWORK >> "$LOGFILE"
+dbg "Network is $NETWORK"
 
 # Check for updates
 if [ $NETWORK = "ONLINE" ]
 then
-  echo "Checking for updates..." >> "$LOGFILE"
+  dbg "Checking for software updates..."
   git fetch
   updates=$(git rev-list HEAD...origin/main --count)
   if [ $updates -gt 0 ]
   then
-    echo "Software is" $updates "updates behind current version. Updating..." >> "$LOGFILE"
+    dbg "Software is $updates updates behind current version. Updating..."
     git pull
   else
-    echo "Software is up to date" >> "$LOGFILE"
+    dbg "Software is up to date"
   fi
   # Download mail
-  echo "Downloading mail..." >> "$LOGFILE"
+  dbg "Downloading mail..."
   offlineimap -c "$CONFDIR"/mail.ini
   
 fi
-echo "Starting iamaduck.py..." >> "$LOGFILE"
+dbg "Starting iamaduck.py..."
 "$VPYTHON" src/iamaduck.py
