@@ -45,8 +45,7 @@ def setup():
     """Initialises values
     """
     
-    
-    config.dbg("screen_default: setup")
+    config.dbg("screen_quacks: reading quacks")
     for msg in mailbox.Maildir('/home/anas/iamaduck/mail/INBOX'):
       # Subject lines can contain encoded strings like =?UTF-8... which
       # are sometimes not converted to plain text properly. Bizarrely,
@@ -57,12 +56,10 @@ def setup():
       decoded_subject = email.header.decode_header(raw_subject)
       re_encoded_subject = email.header.make_header(decoded_subject)
       subject = str(re_encoded_subject)
-      config.dbg("Found quack:" + subject)
       # The following line removes newlines (\r\n) sometimes present in long subjects
-      q = ''.join(msg['Subject'].splitlines())
+      q = ''.join(subject.splitlines())
+      config.dbg("screen_quacks: found quack:" + q)
       quacks.append(q)
-    
-    # print(quacks)
 
 def get_image():
     """Returns an image to be displayed on the screen
