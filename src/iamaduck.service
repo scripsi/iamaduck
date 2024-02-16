@@ -5,9 +5,8 @@ After=network.target
 
 [Service]
 ExecStart=/bin/bash src/iamaduck.sh
-WorkingDirectory=/home/anas/iamaduck
+WorkingDirectory=%h/iamaduck
 Restart=on-failure
-User=anas
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
