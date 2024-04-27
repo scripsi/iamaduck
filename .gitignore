@@ -5,3 +5,5 @@
 mail/
 __pycache__
 .venv/
+configs/
+dev/
