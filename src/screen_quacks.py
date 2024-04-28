@@ -24,6 +24,26 @@ colours = [(config.BLACK,config.WHITE),(config.BLACK,config.YELLOW),(config.BLAC
            (config.YELLOW,config.BLACK),(config.YELLOW,config.GREEN),(config.YELLOW,config.BLUE),(config.YELLOW,config.RED),
            (config.ORANGE,config.BLACK),(config.ORANGE,config.BLUE)]
 
+
+def get_image():
+    """Returns an image to be displayed on the screen
+    """
+
+    quack = get_random_quack()
+    font = get_random_font()
+    bg,fg = random.choice(colours)
+
+    fs,q = smoosh_text(quack, font, config.WIDTH - (MARGIN * 2), config.HEIGHT - (MARGIN * 2))
+    output_font = ImageFont.truetype(font, fs)
+
+    ax, ay, bx, by = img_draw.multiline_textbbox((0,0),q,font=output_font,align="center",spacing=LEADING)
+    x = ((config.WIDTH - (bx - ax)) / 2) - ax
+    y = ((config.HEIGHT - (by - ay)) / 2) - ay
+    img_draw.rectangle([0,0,config.WIDTH,config.HEIGHT],fill=bg)
+    img_draw.multiline_text((x,y),q,fill=fg,font=output_font,spacing=LEADING,align="center")
+
+    return img
+
 def get_random_quack():
     """Returns a random quack from messages in a mailbox
     """
@@ -48,29 +68,6 @@ def get_random_font():
     font = os.path.join(font_dir,[f for f in os.listdir(font_dir) if f.endswith(".ttf")][0])
 
     return font
-
-def get_image():
-    """Returns an image to be displayed on the screen
-    """
-
-    return img
-
-def update_image():
-    """Updates the image in preparation for display
-    """
-
-    quack = get_random_quack()
-    font = get_random_font()
-    bg,fg = random.choice(colours)
-
-    fs,q = smoosh_text(quack, font, config.WIDTH - (MARGIN * 2), config.HEIGHT - (MARGIN * 2))
-    output_font = ImageFont.truetype(font, fs)
-
-    ax, ay, bx, by = img_draw.multiline_textbbox((0,0),q,font=output_font,align="center",spacing=LEADING)
-    x = ((config.WIDTH - (bx - ax)) / 2) - ax
-    y = ((config.HEIGHT - (by - ay)) / 2) - ay
-    img_draw.rectangle([0,0,config.WIDTH,config.HEIGHT],fill=bg)
-    img_draw.multiline_text((x,y),q,fill=fg,font=output_font,spacing=LEADING,align="center")
 
 
 def smoosh_text(text, font_name, box_width, box_height):

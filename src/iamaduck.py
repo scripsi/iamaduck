@@ -10,6 +10,7 @@ from gpiozero import Button, LED
 from signal import pause
 import screen_startup
 import screen_quacks
+import screen_cat
 import os
 from configparser import ConfigParser
 
@@ -27,15 +28,13 @@ button_d = Button(24)
 indiCat = LED(23)
 
 
-def show_image(image_to_show):
+def show_quack():
+    inky.set_image(screen_quacks.get_image())
+    inky.show()
 
-    if image_to_show == "quacks":
-        screen_quacks.update_image()
-        inky.set_image(screen_quacks.get_image())
-        inky.show()
-
-def show_quacks():
-    show_image("quacks")
+def show_cat():
+    inky.set_image(screen_cat.get_image())
+    inky.show()
 
 def toggle_indiCat():
     config.dbg("indiCat toggled!")
@@ -50,20 +49,18 @@ def turn_off():
 
 button_a.when_pressed = toggle_indiCat
 button_a.when_held = turn_off
-button_b.when_released = show_quacks
-button_c.when_released = show_quacks
-button_d.when_released = show_quacks
+button_b.when_released = show_quack
+button_c.when_released = show_cat
+button_d.when_released = show_quack
 
 indiCat.blink()
 config.setup()
-config.dbg("Debugging enabled!")
-screen_startup.update_image()
 inky.set_image(screen_startup.get_image())
 inky.show()
 time.sleep(5)
-show_quacks()
+show_quack()
 indiCat.off()
-schedule.every(int(config.ini['screen_quacks']['refresh_interval'])).minutes.do(show_quacks)
+schedule.every(int(config.ini['screen_quacks']['refresh_interval'])).minutes.do(show_quack)
 
 while True:
     schedule.run_pending()

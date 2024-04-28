@@ -14,23 +14,8 @@ img_draw = ImageDraw.Draw(img)
 
 font = "/home/anas/iamaduck/assets/fonts/Merriweather/Merriweather-Regular.ttf"
 
-def setup():
-    """Initialises values
-    """
-    
-    
-    config.dbg("screen_startup: setup")
-    
-    # print(quacks)
-
 def get_image():
     """Returns an image to be displayed on the screen
-    """
-
-    return img
-
-def update_image():
-    """Updates the image in preparation for display
     """
 
     messages = ["I am a Duck is starting on:\n"]
@@ -56,3 +41,5 @@ def update_image():
     y = ((config.HEIGHT - (by - ay)) / 2) - ay
     img_draw.rectangle([0,0,config.WIDTH,config.HEIGHT],fill=bg)
     img_draw.multiline_text((x,y),message,fill=fg,font=output_font,spacing=LEADING,align="center")
+
+    return img
