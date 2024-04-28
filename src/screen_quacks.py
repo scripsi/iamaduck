@@ -5,7 +5,7 @@ import random
 import math
 import mailbox
 import email
-# from email import policy
+import os
 
 LEADING = 2
 MARGIN = 20
@@ -13,22 +13,24 @@ MARGIN = 20
 img = Image.new(mode='P',size=(config.WIDTH,config.HEIGHT), color=config.WHITE)
 img_draw = ImageDraw.Draw(img)
 
-fonts = ["/home/anas/iamaduck/assets/fonts/Action_Man/Action_Man_Bold.ttf",
-         "/home/anas/iamaduck/assets/fonts/ArchitectsDaughter/ArchitectsDaughter-Regular.ttf",
-         "/home/anas/iamaduck/assets/fonts/Bangers/Bangers-Regular.ttf",
-         "/home/anas/iamaduck/assets/fonts/FredokaOne/FredokaOne-Regular.ttf",
-         "/home/anas/iamaduck/assets/fonts/HachiMaruPop/HachiMaruPop-Regular.ttf",
-         "/home/anas/iamaduck/assets/fonts/Lobster/Lobster-Regular.ttf",
-         "/home/anas/iamaduck/assets/fonts/LondrinaSolid/LondrinaSolid-Regular.ttf",
-         "/home/anas/iamaduck/assets/fonts/Merienda/Merienda-Regular.ttf",
-         "/home/anas/iamaduck/assets/fonts/Merriweather/Merriweather-Regular.ttf",
-         "/home/anas/iamaduck/assets/fonts/Pacifico/Pacifico-Regular.ttf",
-         "/home/anas/iamaduck/assets/fonts/Ranchers/Ranchers-Regular.ttf",
-         "/home/anas/iamaduck/assets/fonts/RobotoSlab/RobotoSlab-Bold.ttf",
-         "/home/anas/iamaduck/assets/fonts/RockSalt/RockSalt-Regular.ttf",
-         "/home/anas/iamaduck/assets/fonts/SpecialElite/SpecialElite-Regular.ttf",
-         "/home/anas/iamaduck/assets/fonts/StalinistOne/StalinistOne-Regular.ttf",
-         "/home/anas/iamaduck/assets/fonts/Ultra/Ultra-Regular.ttf"]
+fonts_dir = "/home/anas/iamduck/assets/fonts"
+
+# fonts = ["/home/anas/iamaduck/assets/fonts/Action_Man/Action_Man_Bold.ttf",
+#         "/home/anas/iamaduck/assets/fonts/ArchitectsDaughter/ArchitectsDaughter-Regular.ttf",
+#         "/home/anas/iamaduck/assets/fonts/Bangers/Bangers-Regular.ttf",
+#         "/home/anas/iamaduck/assets/fonts/FredokaOne/FredokaOne-Regular.ttf",
+#         "/home/anas/iamaduck/assets/fonts/HachiMaruPop/HachiMaruPop-Regular.ttf",
+#         "/home/anas/iamaduck/assets/fonts/Lobster/Lobster-Regular.ttf",
+#         "/home/anas/iamaduck/assets/fonts/LondrinaSolid/LondrinaSolid-Regular.ttf",
+#         "/home/anas/iamaduck/assets/fonts/Merienda/Merienda-Regular.ttf",
+#         "/home/anas/iamaduck/assets/fonts/Merriweather/Merriweather-Regular.ttf",
+#         "/home/anas/iamaduck/assets/fonts/Pacifico/Pacifico-Regular.ttf",
+#         "/home/anas/iamaduck/assets/fonts/Ranchers/Ranchers-Regular.ttf",
+#         "/home/anas/iamaduck/assets/fonts/RobotoSlab/RobotoSlab-Bold.ttf",
+#         "/home/anas/iamaduck/assets/fonts/RockSalt/RockSalt-Regular.ttf",
+#         "/home/anas/iamaduck/assets/fonts/SpecialElite/SpecialElite-Regular.ttf",
+#         "/home/anas/iamaduck/assets/fonts/StalinistOne/StalinistOne-Regular.ttf",
+#         "/home/anas/iamaduck/assets/fonts/Ultra/Ultra-Regular.ttf"]
 
 # colour schemes (background,foreground)
 colours = [(config.BLACK,config.WHITE),(config.BLACK,config.YELLOW),(config.BLACK,config.ORANGE),
@@ -39,27 +41,52 @@ colours = [(config.BLACK,config.WHITE),(config.BLACK,config.YELLOW),(config.BLAC
            (config.YELLOW,config.BLACK),(config.YELLOW,config.GREEN),(config.YELLOW,config.BLUE),(config.YELLOW,config.RED),
            (config.ORANGE,config.BLACK),(config.ORANGE,config.BLUE)]
 
-quacks = []
+# quacks = []
 
-def setup():
-    """Initialises values
+# def setup():
+#    """Initialises values
+#    """
+#    
+#    config.dbg("screen_quacks: reading quacks")
+#    for msg in mailbox.Maildir('/home/anas/iamaduck/mail/INBOX'):
+#      # Subject lines can contain encoded strings like =?UTF-8... which
+#      # are sometimes not converted to plain text properly. Bizarrely,
+#      # the solution is to use email.header's convenience methods to
+#      # decode then re-encode the subject text, then finally cast to
+#      # a string!
+#      raw_subject = msg['subject']
+#      decoded_subject = email.header.decode_header(raw_subject)
+#      re_encoded_subject = email.header.make_header(decoded_subject)
+#      subject = str(re_encoded_subject)
+#      # The following line removes newlines (\r\n) sometimes present in long subjects
+#      q = ''.join(subject.splitlines())
+#      config.dbg("screen_quacks: found quack:" + q)
+#      quacks.append(q)
+
+def get_random_quack():
+    """Returns a random quack from messages in a mailbox
     """
+
+    mb=mailbox.Maildir('~/iamaduck/mail/INBOX')
+    mb.colon = '!' # makes the maildir Windows compatible
+    msg=random.choice(mb.values())
+    raw_subject = msg['subject']
+    decoded_subject = email.header.decode_header(raw_subject)
+    re_encoded_subject = email.header.make_header(decoded_subject)
+    subject = str(re_encoded_subject)
+    # The following line removes newlines (\r\n) sometimes present in long subjects
+    q = ''.join(subject.splitlines())
     
-    config.dbg("screen_quacks: reading quacks")
-    for msg in mailbox.Maildir('/home/anas/iamaduck/mail/INBOX'):
-      # Subject lines can contain encoded strings like =?UTF-8... which
-      # are sometimes not converted to plain text properly. Bizarrely,
-      # the solution is to use email.header's convenience methods to
-      # decode then re-encode the subject text, then finally cast to
-      # a string!
-      raw_subject = msg['subject']
-      decoded_subject = email.header.decode_header(raw_subject)
-      re_encoded_subject = email.header.make_header(decoded_subject)
-      subject = str(re_encoded_subject)
-      # The following line removes newlines (\r\n) sometimes present in long subjects
-      q = ''.join(subject.splitlines())
-      config.dbg("screen_quacks: found quack:" + q)
-      quacks.append(q)
+    return q
+
+def get_random_font():
+    """Returns a random font from a series of font files in subdirectories
+    """
+
+    font_dir = random.choice([d.path for d in os.scandir(fonts_dir) if d.is_dir()])
+    font = os.path.join(font_dir,[f for f in os.listdir(font_dir) if f.endswith(".ttf")][0])
+
+    return font
 
 def get_image():
     """Returns an image to be displayed on the screen
@@ -71,8 +98,8 @@ def update_image():
     """Updates the image in preparation for display
     """
 
-    quack = random.choice(quacks)
-    font = random.choice(fonts)
+    quack = get_random_quack()
+    font = get_random_font()
     bg,fg = random.choice(colours)
 
     fs,q = smoosh_text(quack, font, config.WIDTH - (MARGIN * 2), config.HEIGHT - (MARGIN * 2))
