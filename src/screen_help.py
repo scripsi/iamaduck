@@ -10,7 +10,7 @@ LEADING = 2
 MARGIN = 20
 
 rgb_img = Image.open("/home/anas/iamaduck/assets/img/help-page.png")
-img = Image.convert(mode='P', palette=config.PALETTE)
+img = rgb_img.convert(mode='P', palette=config.PALETTE)
 # img = Image.new(mode='P',size=(config.WIDTH,config.HEIGHT), color=config.WHITE)
 img_draw = ImageDraw.Draw(img)
 
