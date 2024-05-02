@@ -32,33 +32,33 @@ button_c.was_held = False
 button_d.was_held = False
 indiCat = LED(23)
 
-def toggle_indiCat(btn):
-    if not btn.was_held:
+def toggle_indiCat():
+    if not button_a.was_held:
       config.dbg("Button A pressed. IndiCat toggled!")
       indiCat.toggle()
-    btn.was_held = False
+    button_a.was_held = False
 
-def show_quack(btn):
-    if not btn.was_held:
+def show_quack():
+    if not button_b.was_held:
       config.dbg("Button B Pressed. Showing new Quack!")
       inky.set_image(screen_quacks.get_image())
       inky.show()
-    btn.was_held = False
+    button_b.was_held = False
 
-def show_cat(btn):
-    if not btn.was_held:
+def show_cat():
+    if not button_c.was_held:
       config.dbg("Button C Pressed. Showing new Cat!")
       inky.set_image(screen_cat.get_image())
       inky.show()
-    btn.was_held = False
+    button_c.was_held = False
 
-def show_temperature(btn):
-    if not btn.was_held:
+def show_temperature():
+    if not button_d.was_held:
        config.dbg("Button D Pressed.")
-    btn.was_held = False
+    button_d.was_held = False
 
-def turn_off(btn):
-    btn.was_held = True
+def turn_off():
+    button_a.was_held = True
     config.dbg("Button A held. Shutting down.")
     indiCat.blink(on_time=0.2,off_time=0.2)
     time.sleep(2)
@@ -68,15 +68,15 @@ def turn_off(btn):
     os.system("sudo shutdown now")
 
 def pause_quack(btn):
-    btn.was_held = True
+    button_b.was_held = True
     config.dbg("Button B held. Pausing quack!")
 
 def pause_cat(btn):
-    btn.was_held = True
+    button_c.was_held = True
     config.dbg("Button C held. Pausing cat!")
 
 def show_help(btn):
-    btn.was_held = True
+    button_d.was_held = True
     config.dbg("Button D held. Showing help.")
     inky.set_image(screen_help.get_image())
     inky.show()
