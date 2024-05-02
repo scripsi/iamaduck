@@ -26,44 +26,73 @@ button_a = Button(5,hold_time=2)
 button_b = Button(6,hold_time=2)
 button_c = Button(16,hold_time=2)
 button_d = Button(24,hold_time=2)
+button_a.was_held = False
+button_b.was_held = False
+button_c.was_held = False
+button_d.was_held = False
 indiCat = LED(23)
 
+def toggle_indiCat(btn):
+    if not btn.was_held:
+      config.dbg("Button A pressed. IndiCat toggled!")
+      indiCat.toggle()
+    btn.was_held = False
 
-def show_quack():
-    inky.set_image(screen_quacks.get_image())
-    inky.show()
+def show_quack(btn):
+    if not btn.was_held:
+      config.dbg("Button B Pressed. Showing new Quack!")
+      inky.set_image(screen_quacks.get_image())
+      inky.show()
+    btn.was_held = False
 
-def show_cat():
-    inky.set_image(screen_cat.get_image())
-    inky.show()
+def show_cat(btn):
+    if not btn.was_held:
+      config.dbg("Button C Pressed. Showing new Cat!")
+      inky.set_image(screen_cat.get_image())
+      inky.show()
+    btn.was_held = False
 
-def toggle_indiCat():
-    config.dbg("indiCat toggled!")
-    indiCat.toggle()
+def show_temperature(btn):
+    if not btn.was_held:
+       config.dbg("Button D Pressed.")
+    btn.was_held = False
 
-def turn_off():
+def turn_off(btn):
+    btn.was_held = True
     config.dbg("Button A held. Shutting down.")
     indiCat.blink(on_time=0.2,off_time=0.2)
-    inky.set_image(screen_help.get_image("Shutting down ...\nPlease wait 10 secs after\nIndiCat goes out\nbefore unplugging.\n"))
-    #time.sleep(2)
+    time.sleep(2)
     indiCat.on()
+    inky.set_image(screen_help.get_image("Shutting down ...\nPlease wait 10 secs after\nIndiCat goes out\nbefore unplugging."))
+    inky.show()
     os.system("sudo shutdown now")
 
-def show_help():
+def pause_quack(btn):
+    btn.was_held = True
+    config.dbg("Button B held. Pausing quack!")
+
+def pause_cat(btn):
+    btn.was_held = True
+    config.dbg("Button C held. Pausing cat!")
+
+def show_help(btn):
+    btn.was_held = True
     config.dbg("Button D held. Showing help.")
     inky.set_image(screen_help.get_image())
     inky.show()
 
-button_a.when_pressed = toggle_indiCat
+button_a.when_released = toggle_indiCat
 button_a.when_held = turn_off
-button_b.when_pressed = show_quack
-button_c.when_pressed = show_cat
-button_d.when_pressed = show_quack
+button_b.when_released = show_quack
+button_b.when_held = pause_quack
+button_c.when_released = show_cat
+button_c.when_help = pause_cat
+button_d.when_released = show_temperature
 button_d.when_held = show_help
 
 indiCat.blink()
 config.setup()
-inky.set_image(screen_help.get_image("Starting. Please wait...\n"))
+inky.set_image(screen_help.get_image("Starting. Please wait..."))
 inky.show()
 time.sleep(5)
 show_quack()
