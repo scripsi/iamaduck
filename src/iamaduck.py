@@ -8,7 +8,6 @@ import time
 from inky.inky_uc8159 import Inky
 from gpiozero import Button, LED
 from signal import pause
-import screen_startup
 import screen_quacks
 import screen_cat
 import screen_temperature
