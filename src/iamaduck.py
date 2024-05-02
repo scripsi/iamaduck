@@ -67,15 +67,15 @@ def turn_off():
     inky.show()
     os.system("sudo shutdown now")
 
-def pause_quack(btn):
+def pause_quack():
     button_b.was_held = True
     config.dbg("Button B held. Pausing quack!")
 
-def pause_cat(btn):
+def pause_cat():
     button_c.was_held = True
     config.dbg("Button C held. Pausing cat!")
 
-def show_help(btn):
+def show_help():
     button_d.was_held = True
     config.dbg("Button D held. Showing help.")
     inky.set_image(screen_help.get_image())
