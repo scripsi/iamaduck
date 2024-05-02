@@ -19,7 +19,7 @@ def get_image():
     """
 
     if config.sensor.get_sensor_data():
-        output = 'Temperature: {0:.2f} C\nPressure: {1:.2f} hPa\nHumidity{2:.3f} %RH'.format(
+        output = 'Temperature:\n{0:.1f} C\n\nPressure:\n{1:.1f} hPa\n\nHumidity:\n{2:.1f} %RH'.format(
                 config.sensor.data.temperature,
                 config.sensor.data.pressure,
                 config.sensor.data.humidity)
@@ -28,7 +28,7 @@ def get_image():
 
     bg,fg = (config.BLUE,config.WHITE)
 
-    output_font = ImageFont.truetype(font, 24)
+    output_font = ImageFont.truetype(font, 32)
 
     ax, ay, bx, by = img_draw.multiline_textbbox((0,0),output,font=output_font,align="left",spacing=LEADING)
     x = ((config.WIDTH - (bx - ax)) / 2) - ax
