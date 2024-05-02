@@ -23,9 +23,9 @@ Quack quack!
 
 inky = Inky()
 button_a = Button(5,hold_time=2)
-button_b = Button(6)
-button_c = Button(16)
-button_d = Button(24)
+button_b = Button(6,hold_time=2)
+button_c = Button(16,hold_time=2)
+button_d = Button(24,hold_time=2)
 indiCat = LED(23)
 
 
@@ -44,7 +44,8 @@ def toggle_indiCat():
 def turn_off():
     config.dbg("Button A held. Shutting down.")
     indiCat.blink(on_time=0.2,off_time=0.2)
-    time.sleep(2)
+    inky.set_image(screen_help.get_image("Shutting down ...\nPlease wait 10 secs after\nIndiCat goes out\nbefore unplugging.\n"))
+    #time.sleep(2)
     indiCat.on()
     os.system("sudo shutdown now")
 
@@ -62,7 +63,7 @@ button_d.when_held = show_help
 
 indiCat.blink()
 config.setup()
-inky.set_image(screen_help.get_image())
+inky.set_image(screen_help.get_image("Starting. Please wait...\n"))
 inky.show()
 time.sleep(5)
 show_quack()

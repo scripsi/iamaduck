@@ -14,7 +14,7 @@ img_draw = ImageDraw.Draw(img)
 
 font = "/home/anas/iamaduck/assets/fonts/Merriweather/Merriweather-Regular.ttf"
 
-def get_image():
+def get_image(status="Showing help page\n"):
     """Returns an image to be displayed on the screen
     """
 
@@ -31,6 +31,7 @@ def get_image():
     messages.append(hostname)
     messages.append(ipaddr)
     messages.append(wifi)
+    messages.append(status)
     message='\n'.join(messages)
     bg,fg = (config.BLACK,config.WHITE)
 
@@ -39,6 +40,6 @@ def get_image():
     ax, ay, bx, by = img_draw.multiline_textbbox((0,0),message,font=output_font,align="left",spacing=LEADING)
     x = 310
     y = ((config.HEIGHT - (by - ay)) / 2) - ay
-    img_draw.multiline_text((x,y),message,fill=fg,font=output_font,spacing=LEADING,align="center")
+    img_draw.multiline_text((x,y),message,fill=fg,font=output_font,spacing=LEADING,align="left")
 
     return img
