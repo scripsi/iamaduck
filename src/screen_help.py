@@ -18,7 +18,7 @@ def get_image(status="Showing help page\n"):
     """Returns an image to be displayed on the screen
     """
 
-    messages = ["I am a Duck on:\n"]
+    messages = ["'I am a Duck'\n running on:\n"]
     hostcmd = ('hostname')
     hostresult = subprocess.run(hostcmd, capture_output=True, text=True)
     hostname = hostresult.stdout
@@ -40,6 +40,7 @@ def get_image(status="Showing help page\n"):
     ax, ay, bx, by = img_draw.multiline_textbbox((0,0),message,font=output_font,align="left",spacing=LEADING)
     x = 310
     y = ((config.HEIGHT - (by - ay)) / 2) - ay
+    img_draw.rectangle([x,0,config.WIDTH,config.HEIGHT],fill=bg)
     img_draw.multiline_text((x,y),message,fill=fg,font=output_font,spacing=LEADING,align="left")
 
     return img

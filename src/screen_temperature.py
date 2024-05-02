@@ -34,6 +34,6 @@ def get_image():
     x = ((config.WIDTH - (bx - ax)) / 2) - ax
     y = ((config.HEIGHT - (by - ay)) / 2) - ay
     img_draw.rectangle([0,0,config.WIDTH,config.HEIGHT],fill=bg)
-    img_draw.multiline_text((x,y),message,fill=fg,font=output_font,spacing=LEADING,align="left")
+    img_draw.multiline_text((x,y),output,fill=fg,font=output_font,spacing=LEADING,align="left")
 
     return img
