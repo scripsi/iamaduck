@@ -88,7 +88,7 @@ button_a.when_held = turn_off
 button_b.when_released = show_quack
 button_b.when_held = pause_quack
 button_c.when_released = show_cat
-button_c.when_help = pause_cat
+button_c.when_held = pause_cat
 button_d.when_released = show_temperature
 button_d.when_held = show_help
 
