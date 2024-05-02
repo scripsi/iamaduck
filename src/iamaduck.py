@@ -55,9 +55,9 @@ def show_help():
 
 button_a.when_pressed = toggle_indiCat
 button_a.when_held = turn_off
-button_b.when_released = show_quack
-button_c.when_released = show_cat
-button_d.when_released = show_quack
+button_b.when_pressed = show_quack
+button_c.when_pressed = show_cat
+button_d.when_pressed = show_quack
 button_d.when_held = show_help
 
 indiCat.blink()
