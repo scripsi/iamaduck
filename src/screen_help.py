@@ -9,9 +9,7 @@ import subprocess
 LEADING = 2
 MARGIN = 20
 
-rgb_img = Image.open("/home/anas/iamaduck/assets/img/help-page.png")
-img = rgb_img.convert(mode='P', palette=config.PALETTE)
-# img = Image.new(mode='P',size=(config.WIDTH,config.HEIGHT), color=config.WHITE)
+img = Image.open("/home/anas/iamaduck/assets/img/help-page.png")
 img_draw = ImageDraw.Draw(img)
 
 font = "/home/anas/iamaduck/assets/fonts/Merriweather/Merriweather-Regular.ttf"
@@ -41,7 +39,6 @@ def get_image():
     ax, ay, bx, by = img_draw.multiline_textbbox((0,0),message,font=output_font,align="left",spacing=LEADING)
     x = 310
     y = ((config.HEIGHT - (by - ay)) / 2) - ay
-    img_draw.rectangle([0,0,config.WIDTH,config.HEIGHT],fill=bg)
     img_draw.multiline_text((x,y),message,fill=fg,font=output_font,spacing=LEADING,align="center")
 
     return img
