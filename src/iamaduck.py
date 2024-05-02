@@ -1,19 +1,16 @@
 #!/usr/bin/env python
 
 # import lots of necessary stuff
-import PIL
 import config
 import schedule
 import time
 from inky.inky_uc8159 import Inky
 from gpiozero import Button, LED
-from signal import pause
 import screen_quacks
 import screen_cat
 import screen_temperature
 import screen_help
 import os
-from configparser import ConfigParser
 
 print("""I am a Duck
 
@@ -32,70 +29,80 @@ button_d = Button(24,hold_time=2)
 
 indiCat = LED(23)
 
+def show_quack():
+    inky.set_image(screen_quacks.get_image())
+    inky.show()
+
+def show_cat():
+    inky.set_image(screen_cat.get_image())
+    inky.show()
+
+def show_temperature():
+    inky.set_image(screen_temperature.get_image())
+    inky.show()
+
+def show_help(message=""):
+    inky.set_image(screen_help.get_image(message))
+    inky.show()
+
 def toggle_indiCat(btn):
     if not btn.was_held:
       config.dbg("Button A pressed. IndiCat toggled!")
       indiCat.toggle()
     btn.was_held = False
 
-def show_quack(btn):
+def select_quack(btn):
     if not btn.was_held:
       config.dbg("Button B Pressed. Showing new Quack!")
-      inky.set_image(screen_quacks.get_image())
-      inky.show()
+      show_quack()
     btn.was_held = False
 
-def show_cat(btn):
+def select_cat(btn):
     if not btn.was_held:
       config.dbg("Button C Pressed. Showing new Cat!")
-      inky.set_image(screen_cat.get_image())
-      inky.show()
+      show_cat()
     btn.was_held = False
 
-def show_temperature(btn):
+def select_temperature(btn):
     if not btn.was_held:
-      config.dbg("Button D Pressed.")
-      inky.set_image(screen_temperature.get_image())
-      inky.show()
+      config.dbg("Button D Pressed. Showing temperature!")
+      show_temperature()
     btn.was_held = False
 
-def turn_off(btn):
+def select_shutdown(btn):
     btn.was_held = True
     config.dbg("Button A held. Shutting down.")
     indiCat.blink(on_time=0.2,off_time=0.2)
     time.sleep(2)
     indiCat.on()
-    inky.set_image(screen_help.get_image("Shutting down ...\nPlease wait 10 secs after\nIndiCat goes out\nbefore unplugging."))
-    inky.show()
+    show_help("Shutting down ...\nPlease wait 10 secs after\nIndiCat goes out\nbefore unplugging.")
     os.system("sudo shutdown now")
 
-def pause_quack(btn):
+def save_quack(btn):
     btn.was_held = True
     config.dbg("Button B held. Pausing quack!")
 
-def pause_cat(btn):
+def save_cat(btn):
     btn.was_held = True
     config.dbg("Button C held. Pausing cat!")
 
-def show_help(btn):
+def select_help(btn):
     btn.was_held = True
     config.dbg("Button D held. Showing help.")
-    inky.set_image(screen_help.get_image())
-    inky.show()
-
+    show_help("Showing help.\nPress another button to exit.")
+    
 button_a.when_released = toggle_indiCat
-button_a.when_held = turn_off
-button_b.when_released = show_quack
-button_b.when_held = pause_quack
-button_c.when_released = show_cat
-button_c.when_held = pause_cat
-button_d.when_released = show_temperature
-button_d.when_held = show_help
+button_a.when_held = select_shutdown
+button_b.when_released = select_quack
+button_b.when_held = save_quack
+button_c.when_released = select_cat
+button_c.when_held = save_cat
+button_d.when_released = select_temperature
+button_d.when_held = select_help
 
 indiCat.blink()
 config.setup()
-inky.set_image(screen_help.get_image("Starting. Please wait..."))
-inky.show()
+show_help("Starting. Please wait...")
 time.sleep(5)
 show_quack()
 indiCat.off()
