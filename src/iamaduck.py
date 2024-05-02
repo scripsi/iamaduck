@@ -11,6 +11,7 @@ from signal import pause
 import screen_startup
 import screen_quacks
 import screen_cat
+import screen_help
 import os
 from configparser import ConfigParser
 
@@ -47,15 +48,21 @@ def turn_off():
     indiCat.on()
     os.system("sudo shutdown now")
 
+def show_help():
+    config.dbg("Button D held. Showing help.")
+    inky.set_image(screen_help.get_image())
+    inky.show()
+
 button_a.when_pressed = toggle_indiCat
 button_a.when_held = turn_off
 button_b.when_released = show_quack
 button_c.when_released = show_cat
 button_d.when_released = show_quack
+button_d.when_held = show_help
 
 indiCat.blink()
 config.setup()
-inky.set_image(screen_startup.get_image())
+inky.set_image(screen_help.get_image())
 inky.show()
 time.sleep(5)
 show_quack()
