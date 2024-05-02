@@ -9,7 +9,7 @@ import subprocess
 LEADING = 2
 MARGIN = 20
 
-img = Image.open("home/anas/iamaduck/assets/img/help-page.png")
+img = Image.open("/home/anas/iamaduck/assets/img/help-page.png")
 # img = Image.new(mode='P',size=(config.WIDTH,config.HEIGHT), color=config.WHITE)
 img_draw = ImageDraw.Draw(img)
 
