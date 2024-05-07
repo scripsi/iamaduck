@@ -22,19 +22,20 @@ fi
 right_now=$(date)
 dbg "Starting! $right_now"
 
+dbg "Skipping network config check!"
 # check if network config has been updated
-if [ "$CONFDIR"/wifi.ini -nt /etc/wpa_supplicant/wpa_supplicant.conf ]
-then
-  dbg "Updated WiFi config found"
-  dbg "Rewriting wpa_supplicant..."
-  sudo "$VPYTHON" src/update_wifi.py
-  # make wifi.ini times match wpa_supplicant.conf to avoid reboot loop
-  touch --reference=/etc/wpa_supplicant/wpa_supplicant.conf "$CONFDIR"/wifi.ini
-  dbg "wpa_supplicant.conf rewritten. Rebooting... "
-  sudo reboot
-else
-  dbg "No updates to WiFi config found"
-fi
+#if [ "$CONFDIR"/wifi.ini -nt /etc/wpa_supplicant/wpa_supplicant.conf ]
+#then
+#  dbg "Updated WiFi config found"
+#  dbg "Rewriting wpa_supplicant..."
+#  sudo "$VPYTHON" src/update_wifi.py
+#  # make wifi.ini times match wpa_supplicant.conf to avoid reboot loop
+#  touch --reference=/etc/wpa_supplicant/wpa_supplicant.conf "$CONFDIR"/wifi.ini
+#  dbg "wpa_supplicant.conf rewritten. Rebooting... "
+#  sudo reboot
+#else
+#  dbg "No updates to WiFi config found"
+#fi
 
 # Test network
 NETWORK_RETRY=1
@@ -51,11 +52,13 @@ do
     NETWORK_RETRY=0
     NETWORK="ONLINE"
   else
-    if [ $NETWORK_RETRY_COUNT -gt 10 ]
+    if [ $NETWORK_RETRY_COUNT -gt 9 ]
     then
       dbg "Internet offline. Too many retries"
+      NETWORK_RETRY=0
     else
-      dbg "Internet offline. Retrying in 10 seconds..."
+      ((NETWORK_RETRY_COUNT++))
+      dbg "Internet offline. Tried $NETWORK_RETRY_COUNT times. Retrying in 10 seconds..."
       sleep 10
     fi
   fi
