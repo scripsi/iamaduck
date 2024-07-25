@@ -22,20 +22,20 @@ fi
 right_now=$(date)
 dbg "Starting! $right_now"
 
-dbg "Skipping network config check!"
+dbg "Checking for network config updates!"
 # check if network config has been updated
-#if [ "$CONFDIR"/wifi.ini -nt /etc/wpa_supplicant/wpa_supplicant.conf ]
-#then
-#  dbg "Updated WiFi config found"
-#  dbg "Rewriting wpa_supplicant..."
-#  sudo "$VPYTHON" src/update_wifi.py
-#  # make wifi.ini times match wpa_supplicant.conf to avoid reboot loop
-#  touch --reference=/etc/wpa_supplicant/wpa_supplicant.conf "$CONFDIR"/wifi.ini
-#  dbg "wpa_supplicant.conf rewritten. Rebooting... "
-#  sudo reboot
-#else
-#  dbg "No updates to WiFi config found"
-#fi
+if [ "$CONFDIR"/wifi.ini -nt "$CONFDIR"/last-wifi-update.txt ]
+then
+  dbg "Changed WiFi config found"
+  dbg "Updating network settings..."
+  sudo "$VPYTHON" src/update_wifi.py
+  # make wifi.ini times match wpa_supplicant.conf to avoid reboot loop
+  touch --reference="$CONFDIR"/wifi.ini "$CONFDIR"/last-wifi-update.txt
+  dbg "Network settings changed. Rebooting... "
+  sudo reboot
+else
+  dbg "No updates to WiFi config found"
+fi
 
 # Test network
 NETWORK_RETRY=1
