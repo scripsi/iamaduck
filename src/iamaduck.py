@@ -11,6 +11,7 @@ import screen_cat
 import screen_temperature
 import screen_help
 import os
+import subprocess
 
 print("""I am a Duck
 
@@ -28,6 +29,10 @@ button_c = Button(16,hold_time=2)
 button_d = Button(24,hold_time=2)
 
 indiCat = LED(23)
+
+def fetch_mail():
+    print("Fetching mail...")
+    subprocess.run(["bash", "src/getmail.sh"])
 
 def show_quack():
     inky.set_image(screen_quacks.get_image())
@@ -104,9 +109,11 @@ indiCat.blink()
 config.setup()
 show_help("Starting. Please wait...")
 time.sleep(5)
+fetch_mail()
 show_quack()
 indiCat.off()
 schedule.every(int(config.ini['screen_quacks']['refresh_interval'])).minutes.do(show_quack)
+schedule.every().hour.at(":55").do(fetch_mail)
 
 while True:
     schedule.run_pending()
