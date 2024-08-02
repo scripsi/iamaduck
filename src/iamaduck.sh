@@ -81,8 +81,9 @@ then
   fi
   # Download mail
   dbg "Downloading mail..."
-  offlineimap -c "$CONFDIR"/mail.ini
-  
+  . src/getmail.sh
+  #offlineimap -c "$CONFDIR"/mail.ini
+  dbg "Mail download finished."
 fi
 dbg "Starting iamaduck.py..."
 "$VPYTHON" src/iamaduck.py
