@@ -1,0 +1,23 @@
+[project]
+name = "iamaduck"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Scripsi", email = "scripsi@scripsi.uk" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "bme680>=2.0.0",
+    "gpiozero>=2.0.1.post3",
+    "inky>=2.4.0",
+    "lgpio>=0.2.2.0",
+    "schedule>=1.2.2",
+]
+
+[project.scripts]
+iamaduck = "iamaduck:main"
+
+[build-system]
+requires = ["uv_build>=0.12.12,<0.13.0"]
+build-backend = "uv_build"
